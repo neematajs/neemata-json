@@ -1,0 +1,1 @@
+## JSON format for [Neemata](https://github.com/neematajs/neemata)
