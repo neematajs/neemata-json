@@ -38,5 +38,5 @@
 		"vitest": "^2.0.3"
 	},
 	"packageManager": "pnpm@9.5.0",
-	"files": ["src", "dist", "tsconfig.json", "LICENCE.md", "README.md"]
+	"files": ["src", "dist", "tsconfig.json", "LICENSE.md", "README.md"]
 }
