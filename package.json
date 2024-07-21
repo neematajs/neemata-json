@@ -25,17 +25,17 @@
     }
   },
   "peerDependencies": {
-    "@neematajs/client": "^1.1.0-alpha.2",
-    "@neematajs/common": "^1.1.0-alpha.2"
+    "@neematajs/client": "^1.1.0-alpha.3",
+    "@neematajs/common": "^1.1.0-alpha.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.8.0",
+    "@biomejs/biome": "^1.8.3",
     "@neematajs/builder": "github:neematajs/builder#9b0438fa68a23a9a077d6df2725135e5bf14df9a",
-    "@neematajs/client": "^1.1.0-alpha.2",
-    "@neematajs/common": "^1.1.0-alpha.2",
-    "husky": "^9.0.11",
-    "typescript": "^5.5.0",
-    "vitest": "^2.0.0"
+    "@neematajs/client": "^1.1.0-alpha.3",
+    "@neematajs/common": "^1.1.0-alpha.3",
+    "husky": "^9.1.1",
+    "typescript": "^5.5.3",
+    "vitest": "^2.0.3"
   },
   "packageManager": "pnpm@9.5.0"
 }
