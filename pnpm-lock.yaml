@@ -14,9 +14,12 @@ importers:
       '@neematajs/builder':
         specifier: github:neematajs/builder#9b0438fa68a23a9a077d6df2725135e5bf14df9a
         version: https://codeload.github.com/neematajs/builder/tar.gz/9b0438fa68a23a9a077d6df2725135e5bf14df9a
+      '@neematajs/client':
+        specifier: ^1.1.0-alpha.2
+        version: 1.1.0-alpha.2(@neematajs/common@1.1.0-alpha.2)(@neematajs/contract@1.1.0-alpha.2(@neematajs/common@1.1.0-alpha.2))
       '@neematajs/common':
-        specifier: ^1.0.0
-        version: link:../core/packages/common
+        specifier: ^1.1.0-alpha.2
+        version: 1.1.0-alpha.2
       husky:
         specifier: ^9.0.11
         version: 9.0.11
@@ -251,6 +254,20 @@ packages:
     version: 1.0.0
     hasBin: true
 
+  '@neematajs/client@1.1.0-alpha.2':
+    resolution: {integrity: sha512-1vJ60bWzunOnKuoIJvkRLXcNdyllNCXMRIyfnUFZqIRwBa6QyjFa+iWRrMFCzG5c9YD/fDUGVfa+aV9vjk8m4w==}
+    peerDependencies:
+      '@neematajs/common': 1.1.0-alpha.2
+      '@neematajs/contract': 1.1.0-alpha.2
+
+  '@neematajs/common@1.1.0-alpha.2':
+    resolution: {integrity: sha512-ILn4FRYYi6u9Vtb1qOfq8AsAmoa7isGSnMFYKrgVNDK/rF3j5VCqrIpc20eJ247mYyOYx/bri1SMHED/b84Eqg==}
+
+  '@neematajs/contract@1.1.0-alpha.2':
+    resolution: {integrity: sha512-5dnWN22vazKSCGWzFOCTnkhRUiQRJkdNpByxpGkbnPJoycKc8d8oz8bCmwN0Gu/yNYMty2p1i+btt/lGf7evvg==}
+    peerDependencies:
+      '@neematajs/common': 1.1.0-alpha.2
+
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
@@ -334,6 +351,9 @@ packages:
     resolution: {integrity: sha512-yjk2MAkQmoaPYCSu35RLJ62+dz358nE83VfTePJRp8CG7aMg25mEJYpXFiD+NcevhX8LxD5OP5tktPXnXN7GDw==}
     cpu: [x64]
     os: [win32]
+
+  '@sinclair/typebox@0.32.34':
+    resolution: {integrity: sha512-a3Z3ytYl6R/+7ldxx04PO1semkwWlX/8pTqxsPw4quIcIXDFPZhOc1Wx8azWmkU26ccK3mHwcWenn0avNgAKQg==}
 
   '@swc/core-darwin-arm64@1.7.0':
     resolution: {integrity: sha512-2ylhM7f0HwUwLrFYZAe/dse8PCbPsYcJS3Dt7Q8NT3PUn7vy6QOMxNcOPPuDrnmaXqQQO3oxdmRapguTxaat9g==}
@@ -919,6 +939,18 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/helpers'
 
+  '@neematajs/client@1.1.0-alpha.2(@neematajs/common@1.1.0-alpha.2)(@neematajs/contract@1.1.0-alpha.2(@neematajs/common@1.1.0-alpha.2))':
+    dependencies:
+      '@neematajs/common': 1.1.0-alpha.2
+      '@neematajs/contract': 1.1.0-alpha.2(@neematajs/common@1.1.0-alpha.2)
+
+  '@neematajs/common@1.1.0-alpha.2': {}
+
+  '@neematajs/contract@1.1.0-alpha.2(@neematajs/common@1.1.0-alpha.2)':
+    dependencies:
+      '@neematajs/common': 1.1.0-alpha.2
+      '@sinclair/typebox': 0.32.34
+
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
@@ -969,6 +1001,8 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.18.1':
     optional: true
+
+  '@sinclair/typebox@0.32.34': {}
 
   '@swc/core-darwin-arm64@1.7.0':
     optional: true
