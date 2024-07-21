@@ -1,41 +1,42 @@
 {
-  "name": "@neematajs/json-format",
-  "type": "module",
-  "scripts": {
-    "build": "neemata-build --root=./src './**/*.ts'",
-    "test": "vitest run",
-    "test:watch": "vitest watch",
-    "check:type": "tsc --noEmit",
-    "check:lint": "biome lint .",
-    "check:fmt": "biome format .",
-    "check": "pnpm run check:fmt && pnpm run check:lint && pnpm run check:type",
-    "fmt": "biome check --write .",
-    "prepare": "husky"
-  },
-  "exports": {
-    "./client": {
-      "bun": "./src/client.ts",
-      "default": "./dist/client.js",
-      "types": "./src/client.ts"
-    },
-    "./server": {
-      "bun": "./src/server.ts",
-      "default": "./dist/server.js",
-      "types": "./src/server.ts"
-    }
-  },
-  "peerDependencies": {
-    "@neematajs/client": "^1.1.0-alpha.3",
-    "@neematajs/common": "^1.1.0-alpha.3"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^1.8.3",
-    "@neematajs/builder": "github:neematajs/builder#39a944bb0674f589e344e502907e2f1f1bb1af6d",
-    "@neematajs/client": "^1.1.0-alpha.3",
-    "@neematajs/common": "^1.1.0-alpha.3",
-    "husky": "^9.1.1",
-    "typescript": "^5.5.3",
-    "vitest": "^2.0.3"
-  },
-  "packageManager": "pnpm@9.5.0"
+	"name": "@neematajs/json-format",
+	"type": "module",
+	"scripts": {
+		"build": "neemata-build --root=./src './**/*.ts'",
+		"test": "vitest run",
+		"test:watch": "vitest watch",
+		"check:type": "tsc --noEmit",
+		"check:lint": "biome lint .",
+		"check:fmt": "biome format .",
+		"check": "pnpm run check:fmt && pnpm run check:lint && pnpm run check:type",
+		"fmt": "biome check --write .",
+		"prepare": "husky"
+	},
+	"exports": {
+		"./client": {
+			"bun": "./src/client.ts",
+			"default": "./dist/client.js",
+			"types": "./src/client.ts"
+		},
+		"./server": {
+			"bun": "./src/server.ts",
+			"default": "./dist/server.js",
+			"types": "./src/server.ts"
+		}
+	},
+	"peerDependencies": {
+		"@neematajs/client": "^1.1.0-alpha.3",
+		"@neematajs/common": "^1.1.0-alpha.3"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.8.3",
+		"@neematajs/builder": "github:neematajs/builder#39a944bb0674f589e344e502907e2f1f1bb1af6d",
+		"@neematajs/client": "^1.1.0-alpha.3",
+		"@neematajs/common": "^1.1.0-alpha.3",
+		"husky": "^9.1.1",
+		"typescript": "^5.5.3",
+		"vitest": "^2.0.3"
+	},
+	"packageManager": "pnpm@9.5.0",
+	"files": ["src", "dist", "tsconfig.json", "LICENCE.md", "README.md"]
 }
