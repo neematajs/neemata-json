@@ -8,7 +8,7 @@ import {
   encodeNumber,
   encodeText,
 } from '@neematajs/common'
-import { serializeStreamId } from './common'
+import { serializeStreamId } from './common.ts'
 
 export class JsonFormat extends BaseClientFormat {
   mime = 'application/json'

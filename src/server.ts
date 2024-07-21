@@ -5,7 +5,7 @@ import {
   decodeText,
   encodeText,
 } from '@neematajs/common'
-import { deserializeStreamId, isStreamId } from './common'
+import { deserializeStreamId, isStreamId } from './common.ts'
 
 export class JsonFormat extends BaseServerFormat {
   accepts = ['application/json']

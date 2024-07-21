@@ -2,7 +2,7 @@
   "name": "@neematajs/json-format",
   "type": "module",
   "scripts": {
-    "build": "tsup",
+    "build": "neemata-build --root=./src './**/*.ts'",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "check:type": "tsc --noEmit",
@@ -25,16 +25,15 @@
     }
   },
   "peerDependencies": {
-    "@neematajs/common": "^1.0.0",
-    "@neematajs/client": "^1.0.0"
+    "@neematajs/client": "^1.0.0",
+    "@neematajs/common": "^1.0.0"
   },
   "devDependencies": {
-    "@neematajs/common": "^1.0.0",
-    "@neematajs/client": "^1.0.0",
     "@biomejs/biome": "^1.8.0",
-    "esbuild-plugin-file-path-extensions": "^2.1.2",
+    "@neematajs/builder": "github:neematajs/builder#9b0438fa68a23a9a077d6df2725135e5bf14df9a",
+    "@neematajs/client": "^1.0.0",
+    "@neematajs/common": "^1.0.0",
     "husky": "^9.0.11",
-    "tsup": "^8.1.2",
     "typescript": "^5.5.0",
     "vitest": "^2.0.0"
   },
