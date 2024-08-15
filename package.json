@@ -1,16 +1,17 @@
 {
-	"name": "@neematajs/json-format",
+	"name": "@nmtjs/json-format",
 	"type": "module",
 	"scripts": {
 		"build": "neemata-build --root=./src './**/*.ts'",
-		"test": "vitest run",
-		"test:watch": "vitest watch",
-		"check:type": "tsc --noEmit",
-		"check:lint": "biome lint .",
-		"check:fmt": "biome format .",
-		"check": "pnpm run check:fmt && pnpm run check:lint && pnpm run check:type",
-		"fmt": "biome check --write .",
-		"prepare": "husky"
+		"clean": "rm -rf dist node_modules && pnpm -r exec rm -rf dist node_modules",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest watch",
+    "check:type": "tsc --noEmit",
+    "check:lint": "biome lint .",
+    "check:fmt": "biome format .",
+    "check": "pnpm run check:fmt && pnpm run check:lint && pnpm run check:type",
+    "fmt": "biome check --write .",
+    "prepare": "husky"
 	},
 	"exports": {
 		"./client": {
@@ -25,14 +26,12 @@
 		}
 	},
 	"peerDependencies": {
-		"@neematajs/client": "^1.1.0-alpha.3",
-		"@neematajs/common": "^1.1.0-alpha.3"
+		"@nmtjs/common": "^0.0.1"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.3",
-		"@neematajs/builder": "github:neematajs/builder#39a944bb0674f589e344e502907e2f1f1bb1af6d",
-		"@neematajs/client": "^1.1.0-alpha.3",
-		"@neematajs/common": "^1.1.0-alpha.3",
+		"@nmtjs/builder": "github:neematajs/builder#a9139aa321ebf2054ce2f7d26e40a346338be149",
+		"@nmtjs/common": "^0.0.1",
 		"husky": "^9.1.1",
 		"typescript": "^5.5.3",
 		"vitest": "^2.0.3"

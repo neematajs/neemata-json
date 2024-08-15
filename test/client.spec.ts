@@ -1,5 +1,5 @@
-import { UpStream } from '@neematajs/client'
-import { describe, expect, it } from 'vitest'
+import { ApiBlob, type EncodeRpcContext, decodeText } from '@nmtjs/common'
+import { describe, expect, it, vi } from 'vitest'
 import { JsonFormat } from '../src/client.ts'
 import { serializeStreamId } from '../src/common.ts'
 
@@ -22,39 +22,49 @@ describe('Client', () => {
   })
 
   it('should encode rpc', () => {
-    const decoder = new TextDecoder()
+    const streamId = 0
     const rpc = {
       callId: 1,
       service: 'service',
       procedure: 'procedure',
       payload: {
         foo: 'bar',
-        stream: new UpStream(
-          1,
-          { size: 1, type: 'test', filename: 'file.txt' },
-          new ArrayBuffer(1),
-        ),
+        stream: ApiBlob.from(new ArrayBuffer(1), {
+          size: 1,
+          type: 'test',
+          filename: 'file.txt',
+        }),
       },
     }
-    const buffer = format.encodeRpc(rpc)
+    let stream: { streamId: number; blob: ApiBlob } | undefined
+    const ctx = {
+      addStream: vi.fn((blob: ApiBlob) => {
+        return { id: streamId, metadata: blob.metadata }
+      }),
+      getStream: vi.fn(() => stream),
+    } satisfies EncodeRpcContext
+    const buffer = format.encodeRpc(rpc, ctx)
     expect(buffer).toBeInstanceOf(ArrayBuffer)
-    const view = new DataView(buffer)
-    const streamsLength = view.getUint32(0, false)
-    const streams = JSON.parse(
-      decoder.decode(buffer.slice(4, 4 + streamsLength)),
+
+    const [callId, service, procedure, streams, formatPayload] = JSON.parse(
+      decodeText(buffer),
     )
-    expect(streams).toEqual({
-      1: { size: 1, type: 'test', filename: 'file.txt' },
+
+    expect(callId).toBe(rpc.callId)
+    expect(service).toBe(rpc.service)
+    expect(procedure).toBe(rpc.procedure)
+    expect(streams).toHaveProperty(
+      streamId.toString(),
+      rpc.payload.stream.metadata,
+    )
+    expect(formatPayload).toBeTypeOf('string')
+
+    const payload = JSON.parse(formatPayload)
+    expect(payload).toStrictEqual({
+      foo: 'bar',
+      stream: serializeStreamId(streamId),
     })
-    const payload = JSON.parse(decoder.decode(buffer.slice(4 + streamsLength)))
-    expect(payload).toEqual([
-      rpc.callId,
-      rpc.service,
-      rpc.procedure,
-      {
-        foo: 'bar',
-        stream: serializeStreamId(rpc.payload.stream),
-      },
-    ])
   })
+
+  // TODO: test decoding rpc
 })

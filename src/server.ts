@@ -1,73 +1,96 @@
 import {
+  ApiBlob,
   BaseServerFormat,
   type DecodeRpcContext,
-  decodeNumber,
+  type EncodeRpcContext,
+  type RpcResponse,
   decodeText,
   encodeText,
-} from '@neematajs/common'
-import { deserializeStreamId, isStreamId } from './common.ts'
+} from '@nmtjs/common'
+import { deserializeStreamId, isStreamId, serializeStreamId } from './common.ts'
 
+/**
+ * Custom JSON encoding format with Neemata streams support.
+ */
 export class JsonFormat extends BaseServerFormat {
-  accepts = ['application/json']
-  mime = 'application/json'
+  contentType = 'application/x-neemata-json'
+  accept = ['application/x-neemata-json']
 
-  encode(
-    data: any,
-    replacer?: (this: any, key: string, value: any) => any,
-  ): ArrayBuffer {
-    return encodeText(JSON.stringify(data, replacer))
+  encode(data: any): ArrayBuffer {
+    return encodeText(JSON.stringify(data))
   }
 
-  decode(
-    data: ArrayBuffer,
-    replacer?: (this: any, key: string, value: any) => any,
-  ): any {
-    return JSON.parse(decodeText(data), replacer)
+  encodeRpc(rpc: RpcResponse, context: EncodeRpcContext): ArrayBuffer {
+    const { callId, error } = rpc
+    if (error) return this.encode([callId, error, null])
+    else {
+      const streams: any = {}
+      const replacer = (key: string, value: any) => {
+        if (value instanceof ApiBlob) {
+          const stream = context.addStream(value)
+          streams[stream.id] = stream.metadata
+          return serializeStreamId(stream.id)
+        }
+        return value
+      }
+      const payload = JSON.stringify(rpc.payload, replacer)
+      return this.encode([callId, null, streams, payload])
+    }
+  }
+
+  decode(data: ArrayBuffer): any {
+    return JSON.parse(decodeText(data))
   }
 
   decodeRpc(buffer: ArrayBuffer, context: DecodeRpcContext) {
-    const streams = this.parseRPCStreams(buffer, context)
-    const data = this.parseRPCMessageData(
-      buffer.slice(Uint32Array.BYTES_PER_ELEMENT + streams.length),
-      streams.replacer,
-    )
-    return data
-  }
+    const [callId, service, procedure, streams, formatPayload] =
+      this.decode(buffer)
 
-  protected parseRPCStreams(buffer: ArrayBuffer, context: DecodeRpcContext) {
-    const length = decodeNumber(buffer, 'Uint32')
-    const streams = this.decode(
-      buffer.slice(
-        Uint32Array.BYTES_PER_ELEMENT,
-        Uint32Array.BYTES_PER_ELEMENT + length,
-      ),
-    )
-
-    const replacer = streams.length
-      ? (key, value) => {
-          if (isStreamId(value)) {
-            const streamId = deserializeStreamId(value)
-            return context.getStream(streamId)
-          }
-          return value
-        }
-      : undefined
-
-    for (const [id, metadata] of Object.entries(streams)) {
-      context.addStream(Number.parseInt(id), metadata as any)
+    const replacer = (key: string, value: any) => {
+      if (typeof value === 'string' && isStreamId(value)) {
+        const id = deserializeStreamId(value)
+        const metadata = streams[id]
+        return context.addStream(id, metadata)
+      }
+      return value
     }
 
-    return { length, replacer }
+    const payload = formatPayload ? JSON.parse(formatPayload, replacer) : null
+
+    return {
+      callId,
+      service,
+      procedure,
+      payload,
+    }
+  }
+}
+
+/**
+ * Standard JSON encoding format with no Neemata streams support.
+ */
+export class StandardJsonFormat extends BaseServerFormat {
+  contentType = 'application/json'
+  accept = ['application/json', 'application/vnd.api+json']
+
+  encode(data: any) {
+    return encodeText(JSON.stringify(data))
   }
 
-  protected parseRPCMessageData(
-    buffer: ArrayBuffer,
-    streamsJsonReplacer?: (...args: any[]) => any,
-  ) {
-    const [callId, service, procedure, payload] = this.decode(
-      buffer,
-      streamsJsonReplacer,
-    )
+  encodeRpc(rpc: RpcResponse) {
+    const { callId, error } = rpc
+    if (error) return this.encode([callId, error, null])
+    else {
+      return this.encode([callId, null, rpc.payload])
+    }
+  }
+
+  decode(buffer: ArrayBuffer) {
+    return JSON.parse(decodeText(buffer))
+  }
+
+  decodeRpc(buffer: ArrayBuffer) {
+    const [callId, service, procedure, payload] = this.decode(buffer)
     return { callId, service, procedure, payload }
   }
 }
